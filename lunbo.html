@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+	body,div,ul,ol,li,span{
+		margin: 0;
+		padding: 0;
+	}
+	li{
+		list-style: none;
+	}
+	#imgbox{
+		width: 810px;
+		height: 320px;
+		margin: 10px auto;
+		position: relative;
+		
+	}
+	ul{
+		width: 810px;
+		height: 320px;		
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
+	ul>li{
+		width: 810px;
+		height: 320px;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
+	ol{
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+	ol li{
+		float: left;
+		width: 40px;
+		height: 40px;
+		margin-left: 10px;	
+	}
+	ol li span{
+		width: 40px;
+		height: 40px;
+		background:white;
+		display: block;
+		border-radius: 50%;		
+	}	
+	</style>
+</head>
+<body>
+	<div id="imgbox">
+		<ul>
+			<li><a href="http://www.baidu.com" target="_blank"><img src="images/001.jpg"/></a></li>
+			<li><a href="http://www.163.com" target="_blank"><img src="images/002.jpg"/></a></li>
+			<li><a href="http://www.sina.com.cn" target="_blank"><img src="images/003.jpg"/></a></li>
+			<li><a href="#"href="http://www.jd.com" target="_blank"><img src="images/004.jpg"/></a></li>
+		</ul>
+		<ol>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
+		</ol>
+	</div>
+<script type="text/javascript" src="startMove.js"> </script>
+	
+
+	<script type="text/javascript">
+		var now=3;//全局变量 当前下标值
+		//找到div
+		var div = document.querySelector("div")
+		//首先找到4个按钮，节点
+		var btns = Array.from(document.querySelectorAll("ol span"))
+		//找到li.
+		var lis = Array.from(document.querySelectorAll("ul li"))
+			//console.log(lis)
+		var len = lis.length;
+		//对每个按钮进行循环,给每个按钮绑定一个点击事件
+		btns.forEach((btn,index)=>{
+			btn.onclick = ()=>{//当鼠标点击时
+				now= index;//把下标赋给全局变量now，这样在tab函数中才能找到下标
+				tab();
+			}	
+		})
+		var tab=()=>{
+			lis.forEach((li,index)=>{//对每一个li进行循环，设置li 的样式
+					//li.style.display = "none";
+					startMove(li,{"opacity":0},()=>{
+						//li.style.display = "none";	
+					})	//引入设置每天一个li的样式透明度为0.异步任务互不影响
+					
+				btns[index].style.background = "";
+					
+				})
+				startMove(lis[now], {"opacity":100});//引入设置当前li的样式透明度为100，异步任务互不影响
+				btns[now].style.background = "skyblue";
+		}
+		tab();
+		//自动轮播
+		var next= ()=>{
+			now++;
+			if(now==len)now=0;
+			tab();
+			
+		}
+		//自动轮播
+		var timer= setInterval(next,3000);
+		div.onmousemove=()=>{
+			clearInterval(timer);
+			console.log(timer)
+		}
+		div.onmouseout=()=>{
+		timer= setInterval(next,3000);
+				
+		}
+	</script>
+</body>
+</html>
